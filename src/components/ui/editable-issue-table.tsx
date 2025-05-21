@@ -111,7 +111,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {issues.map((issue) => {
+          {issues?.map((issue) => {
             const edited = editState[issue.id] || {};
             return (
               <tr key={issue.id} className="border-b hover:bg-gray-50">
@@ -153,7 +153,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     disabled={isSaving}
                   >
                     <option value="">Unassigned</option>
-                    {people.map((person) => (
+                    {people?.map((person) => (
                       <option key={person.id} value={person.id}>
                         {person.name}
                       </option>
@@ -169,7 +169,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     }
                     disabled={isSaving}
                   >
-                    {statuses.map((status) => (
+                    {statuses?.map((status) => (
                       <option key={status.value} value={status.value}>
                         {status.label}
                       </option>
