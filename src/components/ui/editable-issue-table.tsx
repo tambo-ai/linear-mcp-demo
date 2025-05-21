@@ -3,31 +3,48 @@ import { z } from "zod";
 
 // Types for issues, people, and statuses
 export const editableIssueTableSchema = z.object({
-  issues: z.array(
-    z.object({
-      id: z.string().describe("Unique issue ID"),
-      title: z.string().describe("Issue title"),
-      description: z.string().describe("Issue description"),
-      assigneeId: z.string().nullable().describe("Assignee user ID (nullable)"),
-      status: z
-        .string()
-        .describe("Status value (should match one of statuses)"),
-      lastUpdated: z.string().describe("Last updated ISO string"),
-    }),
-  ),
-  people: z.array(
-    z.object({
-      id: z.string().describe("User ID"),
-      name: z.string().describe("User display name"),
-      avatarUrl: z.string().optional().describe("Avatar URL (optional)"),
-    }),
-  ),
-  statuses: z.array(
-    z.object({
-      value: z.string().describe("Status value"),
-      label: z.string().describe("Status display label"),
-    }),
-  ),
+  issues: z
+    .array(
+      z.object({
+        id: z.string().describe("Unique issue ID"),
+        identifier: z
+          .string()
+          .describe("Issue identifier e.g. XYZ-123")
+          .optional(),
+        title: z.string().describe("Issue title"),
+        description: z.string().describe("Issue description"),
+        assigneeId: z
+          .string()
+          .nullable()
+          .describe("Assignee user ID (nullable)"),
+        status: z
+          .string()
+          .describe("Status value (should match one of statuses)"),
+        lastUpdated: z.string().describe("Last updated ISO string"),
+      }),
+    )
+    .describe("Array of issues to display or triage"),
+  people: z
+    .array(
+      z.object({
+        id: z.string().describe("User ID"),
+        name: z.string().describe("User display name"),
+        avatarUrl: z.string().optional().describe("Avatar URL (optional)"),
+      }),
+    )
+    .describe(
+      "Array of all people in the organization, query linear for a list",
+    ),
+  statuses: z
+    .array(
+      z.object({
+        value: z.string().describe("Status value"),
+        label: z.string().describe("Status display label"),
+      }),
+    )
+    .describe(
+      "Array of all possible statuses for issues, in the organization, query linear for a list",
+    ),
   onSave: z
     .function()
     .args(
@@ -116,7 +133,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
             return (
               <tr key={issue.id} className="border-b hover:bg-gray-50">
                 <td className="px-3 py-2 font-mono text-xs text-gray-500">
-                  {issue.id}
+                  {issue.identifier ?? issue.id}
                 </td>
                 <td className="px-3 py-2">
                   <input

@@ -9,6 +9,10 @@
  */
 
 import { DataCard, dataCardSchema } from "@/components/ui/card-data";
+import {
+  EditableIssueTable,
+  editableIssueTableSchema,
+} from "@/components/ui/editable-issue-table";
 import { Graph, graphSchema } from "@/components/ui/graph";
 import type { TamboComponent } from "@tambo-ai/react";
 import { TamboTool } from "@tambo-ai/react";
@@ -47,6 +51,13 @@ export const components: TamboComponent[] = [
       "Use this when you want to display a list of information (>2 elements) that user might want to select from. Not anything that is a list or has links. ",
     component: DataCard,
     propsSchema: dataCardSchema,
+  },
+  {
+    name: "EditableIssueTable",
+    description:
+      "Displays a table of Linear issues with inline editing for title, description, assignee, and status. Allows batch saving of changes. Use when you want to let users review and edit multiple issues at once.",
+    component: EditableIssueTable,
+    propsSchema: editableIssueTableSchema,
   },
   // Add more components here
 ];

@@ -17,6 +17,7 @@ export default function Home() {
 
       <TamboProvider
         apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
+        tamboUrl={process.env.NEXT_PUBLIC_TAMBO_API_URL!}
         components={components}
       >
         <TamboMcpProvider mcpServers={mcpServers}>
