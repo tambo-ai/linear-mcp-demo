@@ -1,3 +1,4 @@
+import { useTamboThread } from "@tambo-ai/react";
 import * as React from "react";
 import { z } from "zod";
 
@@ -233,3 +234,41 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
 };
 
 EditableIssueTable.displayName = "EditableIssueTable";
+
+/**
+ * Wrapper component that handles onSave by sending a message to Tambo via sendThreadMessage.
+ * Accepts all EditableIssueTableProps except onSave.
+ */
+export type EditableIssueTableWithTamboSaveProps = Omit<
+  EditableIssueTableProps,
+  "onSave"
+>;
+
+export const EditableIssueTableWithTamboSave: React.FC<
+  EditableIssueTableWithTamboSaveProps
+> = (props) => {
+  const { sendThreadMessage } = useTamboThread();
+
+  // Forward all props except onSave
+  const handleSave = async (
+    changes: Array<{
+      id: string;
+      changes: {
+        title?: string;
+        description?: string;
+        assigneeId?: string | null;
+        status?: string;
+      };
+    }>,
+  ) => {
+    // TODO: Confirm the correct signature for sendThreadMessage; passing content as a string for now
+    const content = `Update the following issues in Linear: ${JSON.stringify(
+      changes,
+      null,
+      2,
+    )}`;
+    await sendThreadMessage(content, {});
+  };
+
+  return <EditableIssueTable {...props} onSave={handleSave} />;
+};
