@@ -1,12 +1,12 @@
 "use client";
 
-import * as React from "react";
 import { cn } from "@/lib/utils";
-import type { Components } from "react-markdown";
-import { Copy, Check } from "lucide-react";
-import hljs from "highlight.js";
+import DOMPurify from "dompurify";
+import hljs from "highlight.js/lib/core";
 import "highlight.js/styles/github.css";
-import DOMPurify from 'dompurify';
+import { Check, Copy } from "lucide-react";
+import * as React from "react";
+import type { Components } from "react-markdown";
 
 /**
  * Markdown Components for React-Markdown
@@ -120,7 +120,9 @@ export const createMarkdownComponents = (): Components => ({
             <pre className="p-4 whitespace-pre">
               <code
                 className={className}
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(highlighted ?? content) }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(highlighted ?? content),
+                }}
               />
             </pre>
           </div>
