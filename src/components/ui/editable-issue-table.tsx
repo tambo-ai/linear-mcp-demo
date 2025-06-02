@@ -7,7 +7,7 @@ export const editableIssueTableSchema = z.object({
   issues: z
     .array(
       z.object({
-        id: z.string().describe("Unique issue ID"),
+        id: z.string().describe("Raw issue ID from the API"),
         identifier: z
           .string()
           .describe("Issue identifier e.g. XYZ-123")
@@ -28,23 +28,23 @@ export const editableIssueTableSchema = z.object({
   people: z
     .array(
       z.object({
-        id: z.string().describe("User ID"),
+        id: z.string().describe("Raw user ID from the API"),
         name: z.string().describe("User display name"),
         avatarUrl: z.string().optional().describe("Avatar URL (optional)"),
       }),
     )
     .describe(
-      "Array of all people in the organization, query linear for a list",
+      "Array of all users in the organization. Query linear for an authoritative list by calling list_users before displaying",
     ),
   statuses: z
     .array(
       z.object({
-        value: z.string().describe("Status value"),
-        label: z.string().describe("Status display label"),
+        value: z.string().describe("Status id from the API"),
+        label: z.string().describe("Status display label from the API"),
       }),
     )
     .describe(
-      "Array of all possible statuses for issues, in the organization, query linear for a list",
+      "Array of all possible statuses for issues, in the organization. Query linear for an authoritativelist before displaying",
     ),
   onSave: z
     .function()
