@@ -21,6 +21,11 @@ export const editableIssueTableSchema = z.object({
         status: z
           .string()
           .describe("Status value (should match one of statuses)"),
+        priority: z
+          .number()
+          .describe(
+            "Priority level: 0 = No priority, 1 = Urgent, 2 = High, 3 = Normal, 4 = Low",
+          ),
         lastUpdated: z.string().describe("Last updated ISO string"),
       }),
     )
@@ -57,6 +62,7 @@ export const editableIssueTableSchema = z.object({
             description: z.string().optional(),
             assigneeId: z.string().nullable().optional(),
             status: z.string().optional(),
+            priority: z.number().optional(),
           }),
         }),
       ),
@@ -95,7 +101,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
       ...prev,
       [id]: {
         ...prev[id],
-        [field]: value,
+        [field]: field === "priority" ? (value ? Number(value) : 0) : value,
       },
     }));
   };
@@ -125,6 +131,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
             <th className="px-3 py-2 border-b text-left">Description</th>
             <th className="px-3 py-2 border-b text-left">Assignee</th>
             <th className="px-3 py-2 border-b text-left">Status</th>
+            <th className="px-3 py-2 border-b text-left">Priority</th>
             <th className="px-3 py-2 border-b text-left">Last Updated</th>
           </tr>
         </thead>
@@ -194,6 +201,22 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     ))}
                   </select>
                 </td>
+                <td className="px-3 py-2">
+                  <select
+                    className="w-full border rounded px-1 py-0.5 text-sm"
+                    value={edited.priority ?? issue.priority ?? 0}
+                    onChange={(e) =>
+                      handleFieldChange(issue.id, "priority", e.target.value)
+                    }
+                    disabled={isSaving}
+                  >
+                    <option value={0}>No priority</option>
+                    <option value={1}>Urgent</option>
+                    <option value={2}>High</option>
+                    <option value={3}>Normal</option>
+                    <option value={4}>Low</option>
+                  </select>
+                </td>
                 <td className="px-3 py-2 text-xs text-gray-400">
                   {new Date(issue.lastUpdated).toLocaleString()}
                 </td>
@@ -258,6 +281,7 @@ export const EditableIssueTableWithTamboSave: React.FC<
         description?: string;
         assigneeId?: string | null;
         status?: string;
+        priority?: number;
       };
     }>,
   ) => {
