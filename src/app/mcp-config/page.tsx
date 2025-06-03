@@ -1,21 +1,9 @@
 "use client";
+import { MCPTransport, McpServerInfo } from "@tambo-ai/react/mcp";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 // Define MCP transport types
-export enum MCPTransport {
-  SSE = "sse",
-  HTTP = "http",
-}
-
-// Define MCP server configuration types
-export type MCPServerConfig =
-  | string
-  | {
-      url: string;
-      transport?: MCPTransport;
-      name?: string;
-    };
 
 const McpConfigPage = () => {
   // Initialize from localStorage directly to avoid conflicts
@@ -25,11 +13,11 @@ const McpConfigPage = () => {
       : [];
 
   const [mcpServers, setMcpServers] =
-    useState<MCPServerConfig[]>(initialMcpServers);
+    useState<McpServerInfo[]>(initialMcpServers);
   const [serverUrl, setServerUrl] = useState("");
   const [serverName, setServerName] = useState("");
   const [transportType, setTransportType] = useState<MCPTransport>(
-    MCPTransport.HTTP
+    MCPTransport.HTTP,
   );
   const [savedSuccess, setSavedSuccess] = useState(false);
 
@@ -78,7 +66,7 @@ const McpConfigPage = () => {
   };
 
   // Helper function to get server display information
-  const getServerInfo = (server: MCPServerConfig) => {
+  const getServerInfo = (server: McpServerInfo) => {
     if (typeof server === "string") {
       return { url: server, transport: "SSE (default)", name: null };
     } else {
