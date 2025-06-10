@@ -297,7 +297,7 @@ const MessageContent = React.forwardRef<HTMLDivElement, MessageContentProps>(
                   tool: {message.toolCallRequest?.toolName}
                 </span>
                 <span className="whitespace-pre-wrap">
-                  parameters:{" "}
+                  parameters:{"\n"}
                   {stringify(
                     keyifyParameters(message.toolCallRequest?.parameters),
                   )}
