@@ -14,6 +14,10 @@ import {
   editableIssueTableSchema,
 } from "@/components/ui/editable-issue-table";
 import { Graph, graphSchema } from "@/components/ui/graph";
+import {
+  RenderDiagram,
+  renderDiagramSchema,
+} from "@/components/ui/render-diagram";
 import type { TamboComponent } from "@tambo-ai/react";
 import { TamboTool } from "@tambo-ai/react";
 
@@ -58,6 +62,13 @@ export const components: TamboComponent[] = [
       "Displays a table of Linear issues with inline editing for title, description, assignee, and status. Allows batch saving of changes. Use when you want to let users review and edit multiple issues at once.",
     component: EditableIssueTableWithTamboSave,
     propsSchema: editableIssueTableSchema,
+  },
+  {
+    name: "RenderDiagram",
+    description:
+      "Renders Mermaid diagrams in the browser. Use this when you want to display flowcharts, sequence diagrams, gantt charts, or any other diagram that can be defined with Mermaid syntax. Supports different themes and customizable dimensions.",
+    component: RenderDiagram,
+    propsSchema: renderDiagramSchema,
   },
   // Add more components here
 ];
