@@ -285,13 +285,48 @@ export const EditableIssueTableWithTamboSave: React.FC<
       };
     }>,
   ) => {
-    // TODO: Confirm the correct signature for sendThreadMessage; passing content as a string for now
-    const content = `Update the following issues in Linear: ${JSON.stringify(
-      changes,
-      null,
-      2,
-    )}`;
-    await sendThreadMessage(content, {});
+    // Format changes as a nicely formatted markdown message
+    const formatPriority = (priority: number) => {
+      const priorities = {
+        0: "No priority",
+        1: "Urgent",
+        2: "High",
+        3: "Normal",
+        4: "Low",
+      };
+      return priorities[priority as keyof typeof priorities] || "Unknown";
+    };
+
+    let content = "## Linear Issue Updates\n\n";
+    content += `Please update the following ${changes.length} issue${
+      changes.length > 1 ? "s" : ""
+    } in Linear:\n\n`;
+
+    changes.forEach((change, index) => {
+      content += `### Issue ${change.id}\n\n`;
+
+      const changeFields = Object.entries(change.changes);
+      if (changeFields.length > 0) {
+        changeFields.forEach(([field, value]) => {
+          const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
+          let displayValue = value;
+
+          if (field === "priority" && typeof value === "number") {
+            displayValue = formatPriority(value);
+          } else if (field === "assigneeId") {
+            displayValue = value || "Unassigned";
+          }
+
+          content += `- **${fieldName}**: ${displayValue}\n`;
+        });
+      }
+
+      if (index < changes.length - 1) {
+        content += "\n";
+      }
+    });
+
+    await sendThreadMessage(content);
   };
 
   return <EditableIssueTable {...props} onSave={handleSave} />;
