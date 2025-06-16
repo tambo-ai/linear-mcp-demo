@@ -67,7 +67,7 @@ export const editableIssueTableSchema = z.object({
         }),
       ),
     )
-    .returns(z.void()),
+    .returns(z.promise(z.void())),
 });
 
 export type EditableIssueTableProps = z.infer<typeof editableIssueTableSchema>;
@@ -137,7 +137,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
         </thead>
         <tbody>
           {issues?.map((issue) => {
-            const edited = editState[issue.id] || {};
+            const edited = editState[issue.identifier ?? issue.id] || {};
             return (
               <tr key={issue.id} className="border-b hover:bg-gray-50">
                 <td className="px-3 py-2 font-mono text-xs text-gray-500">
@@ -148,7 +148,11 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     className="w-full border rounded px-1 py-0.5 text-sm"
                     value={edited.title ?? issue.title}
                     onChange={(e) =>
-                      handleFieldChange(issue.id, "title", e.target.value)
+                      handleFieldChange(
+                        issue.identifier ?? issue.id,
+                        "title",
+                        e.target.value,
+                      )
                     }
                     disabled={isSaving}
                   />
@@ -158,7 +162,11 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     className="w-full border rounded px-1 py-0.5 text-sm"
                     value={edited.description ?? issue.description}
                     onChange={(e) =>
-                      handleFieldChange(issue.id, "description", e.target.value)
+                      handleFieldChange(
+                        issue.identifier ?? issue.id,
+                        "description",
+                        e.target.value,
+                      )
                     }
                     rows={2}
                     disabled={isSaving}
@@ -170,7 +178,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     value={edited.assigneeId ?? issue.assigneeId ?? ""}
                     onChange={(e) =>
                       handleFieldChange(
-                        issue.id,
+                        issue.identifier ?? issue.id,
                         "assigneeId",
                         e.target.value || null,
                       )
@@ -190,7 +198,11 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     className="w-full border rounded px-1 py-0.5 text-sm"
                     value={edited.status ?? issue.status}
                     onChange={(e) =>
-                      handleFieldChange(issue.id, "status", e.target.value)
+                      handleFieldChange(
+                        issue.identifier ?? issue.id,
+                        "status",
+                        e.target.value,
+                      )
                     }
                     disabled={isSaving}
                   >
@@ -206,7 +218,11 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     className="w-full border rounded px-1 py-0.5 text-sm"
                     value={edited.priority ?? issue.priority ?? 0}
                     onChange={(e) =>
-                      handleFieldChange(issue.id, "priority", e.target.value)
+                      handleFieldChange(
+                        issue.identifier ?? issue.id,
+                        "priority",
+                        e.target.value,
+                      )
                     }
                     disabled={isSaving}
                   >
