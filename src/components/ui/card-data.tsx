@@ -81,28 +81,31 @@ export const DataCard = React.forwardRef<HTMLDivElement, DataCardProps>(
     // Handle navigation to URL
     const handleNavigate = (url?: string) => {
       if (url) {
-        window.open(url, "_blank");
+        // Added "noopener,noreferrer" to prevent reverse-tabnabbing
+        window.open(url, "_blank", "noopener,noreferrer");
       }
     };
 
     return (
-      <div ref={ref} className={cn("w-full", className)} {...props}>
+      <div ref={ref} className={cn("w-full space-y-4", className)} {...props}>
         {title && (
-          <h2 className="text-lg font-medium text-gray-700 mb-3">{title}</h2>
+          <h2 className="text-sm font-medium text-gray-900">{title}</h2>
         )}
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           {options?.map((card) => (
             <div
               key={card.id}
-              className="border-b border-gray-100 pb-2 last:border-0"
+              className={cn(
+                "group relative rounded-md transition-all duration-100",
+                "hover:bg-gray-50/75"
+              )}
             >
               <div
                 className={cn(
-                  "group flex items-start p-1.5 rounded-md transition-colors",
-                  state &&
-                    state.selectedValues.includes(card.value) &&
-                    "bg-gray-50"
+                  "flex items-start p-2.5",
+                  state?.selectedValues.includes(card.value) &&
+                    "bg-gray-50/90"
                 )}
               >
                 <div
@@ -111,16 +114,18 @@ export const DataCard = React.forwardRef<HTMLDivElement, DataCardProps>(
                 >
                   <div
                     className={cn(
-                      "w-4 h-4 border rounded-sm flex items-center justify-center transition-colors",
-                      state && state.selectedValues.includes(card.value)
-                        ? "bg-blue-500 border-blue-500 text-white"
-                        : "border-gray-200 hover:border-gray-300"
+                      "w-4 h-4 rounded transition-all duration-100",
+                      "border border-gray-200",
+                      "flex items-center justify-center",
+                      state?.selectedValues.includes(card.value)
+                        ? "bg-blue-500 border-blue-500"
+                        : "hover:border-gray-300"
                     )}
                   >
-                    {state && state.selectedValues.includes(card.value) && (
+                    {state?.selectedValues.includes(card.value) && (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-2.5 w-2.5"
+                        className="h-2.5 w-2.5 text-white"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -134,7 +139,7 @@ export const DataCard = React.forwardRef<HTMLDivElement, DataCardProps>(
                   </div>
                 </div>
                 <div
-                  className="flex-1 cursor-pointer"
+                  className="flex-1 min-w-0 cursor-pointer"
                   onClick={() =>
                     card.url
                       ? handleNavigate(card.url)
@@ -143,22 +148,21 @@ export const DataCard = React.forwardRef<HTMLDivElement, DataCardProps>(
                 >
                   <h3
                     className={cn(
-                      "text-blue-600 font-medium text-sm",
-                      "group-hover:text-blue-700",
-                      state &&
-                        state.selectedValues.includes(card.value) &&
-                        "text-blue-700"
+                      "text-sm font-medium text-gray-900",
+                      "group-hover:text-gray-900",
+                      state?.selectedValues.includes(card.value) &&
+                        "text-gray-900"
                     )}
                   >
                     {card.label}
                   </h3>
                   {card.description && (
-                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                    <p className="mt-1 text-sm text-gray-500 line-clamp-2">
                       {card.description}
                     </p>
                   )}
                   {card.url && (
-                    <span className="text-xs text-green-600 mt-1 block truncate opacity-80">
+                    <span className="mt-1 text-xs text-gray-400 block truncate">
                       {card.url}
                     </span>
                   )}

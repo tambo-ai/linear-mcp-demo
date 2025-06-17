@@ -123,29 +123,29 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full border text-sm bg-white">
+      <table className="min-w-full text-sm">
         <thead>
-          <tr className="bg-gray-50">
-            <th className="px-3 py-2 border-b text-left">ID</th>
-            <th className="px-3 py-2 border-b text-left">Title</th>
-            <th className="px-3 py-2 border-b text-left">Description</th>
-            <th className="px-3 py-2 border-b text-left">Assignee</th>
-            <th className="px-3 py-2 border-b text-left">Status</th>
-            <th className="px-3 py-2 border-b text-left">Priority</th>
-            <th className="px-3 py-2 border-b text-left">Last Updated</th>
+          <tr>
+            <th className="px-4 py-2 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">ID</th>
+            <th className="px-4 py-2 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">Title</th>
+            <th className="px-4 py-2 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">Description</th>
+            <th className="px-4 py-2 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">Assignee</th>
+            <th className="px-4 py-2 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">Status</th>
+            <th className="px-4 py-2 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">Priority</th>
+            <th className="px-4 py-2 text-left font-medium text-gray-500 text-xs uppercase tracking-wider">Last Updated</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-100">
           {issues?.map((issue) => {
             const edited = editState[issue.identifier ?? issue.id] || {};
             return (
-              <tr key={issue.id} className="border-b hover:bg-gray-50">
-                <td className="px-3 py-2 font-mono text-xs text-gray-500">
+              <tr key={issue.id} className="group hover:bg-gray-50/50">
+                <td className="px-4 py-2 font-mono text-xs text-gray-500">
                   {issue.identifier ?? issue.id}
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-4 py-2">
                   <input
-                    className="w-full border rounded px-1 py-0.5 text-sm"
+                    className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1 py-0.5"
                     value={edited.title ?? issue.title}
                     onChange={(e) =>
                       handleFieldChange(
@@ -157,9 +157,9 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     disabled={isSaving}
                   />
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-4 py-2">
                   <textarea
-                    className="w-full border rounded px-1 py-0.5 text-sm"
+                    className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1 py-0.5 min-h-[2.5rem]"
                     value={edited.description ?? issue.description}
                     onChange={(e) =>
                       handleFieldChange(
@@ -172,9 +172,9 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     disabled={isSaving}
                   />
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-4 py-2">
                   <select
-                    className="w-full border rounded px-1 py-0.5 text-sm"
+                    className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1 py-0.5 cursor-pointer"
                     value={edited.assigneeId ?? issue.assigneeId ?? ""}
                     onChange={(e) =>
                       handleFieldChange(
@@ -193,9 +193,9 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     ))}
                   </select>
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-4 py-2">
                   <select
-                    className="w-full border rounded px-1 py-0.5 text-sm"
+                    className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1 py-0.5 cursor-pointer"
                     value={edited.status ?? issue.status}
                     onChange={(e) =>
                       handleFieldChange(
@@ -213,9 +213,9 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     ))}
                   </select>
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-4 py-2">
                   <select
-                    className="w-full border rounded px-1 py-0.5 text-sm"
+                    className="w-full bg-transparent focus:outline-none focus:ring-1 focus:ring-blue-500 rounded px-1 py-0.5 cursor-pointer"
                     value={edited.priority ?? issue.priority ?? 0}
                     onChange={(e) =>
                       handleFieldChange(
@@ -233,7 +233,7 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
                     <option value={4}>Low</option>
                   </select>
                 </td>
-                <td className="px-3 py-2 text-xs text-gray-400">
+                <td className="px-4 py-2 text-xs text-gray-400">
                   {new Date(issue.lastUpdated).toLocaleString()}
                 </td>
               </tr>
@@ -241,14 +241,14 @@ export const EditableIssueTable: React.FC<EditableIssueTableProps> = ({
           })}
         </tbody>
       </table>
-      <div className="mt-3 flex justify-end">
+      <div className="mt-4 flex justify-end">
         <button
-          className="bg-blue-600 text-white px-4 py-1.5 rounded shadow hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+          className="bg-blue-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2 transition-colors"
           onClick={handleSave}
           disabled={Object.keys(editState).length === 0 || isSaving}
         >
           {isSaving && (
-            <svg className="animate-spin h-4 w-4 mr-1" viewBox="0 0 24 24">
+            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
               <circle
                 className="opacity-25"
                 cx="12"
