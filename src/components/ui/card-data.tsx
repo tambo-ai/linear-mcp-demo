@@ -81,7 +81,8 @@ export const DataCard = React.forwardRef<HTMLDivElement, DataCardProps>(
     // Handle navigation to URL
     const handleNavigate = (url?: string) => {
       if (url) {
-        window.open(url, "_blank");
+        // Added "noopener,noreferrer" to prevent reverse-tabnabbing
+        window.open(url, "_blank", "noopener,noreferrer");
       }
     };
 
@@ -103,8 +104,8 @@ export const DataCard = React.forwardRef<HTMLDivElement, DataCardProps>(
               <div
                 className={cn(
                   "flex items-start p-2.5",
-                  state?.selectedValues.includes(card.value) && 
-                  "bg-gray-50/90"
+                  state?.selectedValues.includes(card.value) &&
+                    "bg-gray-50/90"
                 )}
               >
                 <div
