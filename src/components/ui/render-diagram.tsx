@@ -2,6 +2,8 @@ import { useTambo } from "@tambo-ai/react";
 import mermaid from "mermaid";
 import * as React from "react";
 import { z } from "zod";
+import { cn } from "@/lib/utils";
+import { Loader2Icon, X } from "lucide-react";
 
 // Types for diagram rendering
 export const renderDiagramSchema = z.object({
@@ -116,51 +118,48 @@ export const RenderDiagram: React.FC<RenderDiagramProps> = ({
   return (
     <div className="w-full">
       {title && (
-        <h3 className="text-lg font-semibold mb-3 text-gray-800">{title}</h3>
+        <h3 className="text-sm font-medium text-gray-900 mb-2">{title}</h3>
       )}
 
       <div
-        className="border border-gray-200 rounded-lg bg-white shadow-sm"
+        className="relative overflow-hidden rounded-lg bg-white ring-1 ring-gray-100 transition-shadow hover:ring-gray-200"
         style={{ width, height }}
       >
         {isLoading && (
-          <div className="h-full flex items-center justify-center">
-            <div className="flex items-center gap-2 text-gray-500">
-              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
-              </svg>
-              Rendering diagram...
+          <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-[1px]">
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <Loader2Icon className="h-3 w-3 animate-spin" />
+              <span className="text-gray-600">Rendering diagram...</span>
             </div>
           </div>
         )}
 
         {error && isComplete && (
-          <div className="h-full flex items-center justify-center p-4">
-            <div className="text-center">
-              <div className="text-red-600 font-medium mb-2">Diagram Error</div>
-              <div className="text-sm text-gray-600 max-w-md">{error}</div>
+          <div className="absolute inset-0 flex items-center justify-center bg-white">
+            <div className="px-4 py-3 rounded-md bg-red-50 max-w-md w-full mx-4">
+              <div className="flex items-center gap-2 mb-1">
+                <X className="h-4 w-4 text-red-500" />
+                <span className="text-sm font-medium text-red-800">
+                  Diagram Error
+                </span>
+              </div>
+              <p className="text-sm text-red-700 leading-relaxed">
+                {error}
+              </p>
             </div>
           </div>
         )}
 
         <div
           ref={diagramRef}
-          className="w-full h-full flex items-center justify-center overflow-auto"
-          style={{ display: isLoading ? "none" : "flex" }}
-        />
+          className={cn(
+            "w-full h-full flex items-center justify-center overflow-auto p-4",
+            isLoading ? "opacity-0" : "opacity-100",
+            "transition-opacity duration-200"
+          )}
+        >
+          {/* Mermaid diagram will be rendered here */}
+        </div>
       </div>
     </div>
   );

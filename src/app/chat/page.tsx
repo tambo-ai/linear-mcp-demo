@@ -22,7 +22,10 @@ export default function Home() {
       >
         <TamboMcpProvider mcpServers={mcpServers}>
           <div className="flex-1 overflow-hidden">
-            <MessageThreadFull contextKey="tambo-template" />
+            <MessageThreadFull
+              contextKey="tambo-template"
+              className="max-w-4xl mx-auto"
+            />
           </div>
         </TamboMcpProvider>
       </TamboProvider>
