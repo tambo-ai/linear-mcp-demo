@@ -21,7 +21,7 @@ export function MessageGenerationStage({
   showLabel = true,
   ...props
 }: GenerationStageProps) {
-  const { thread, isIdle } = useTambo();
+  const { thread } = useTambo();
   const stage = thread?.generationStage;
 
   // Only render if we have a generation stage
@@ -38,15 +38,10 @@ export function MessageGenerationStage({
     STREAMING_RESPONSE: "Generating response",
     COMPLETE: "Complete",
     ERROR: "Error",
-    CANCELLED: "Cancelled",
   };
 
   const label =
     stageLabels[stage] || `${stage.charAt(0).toUpperCase() + stage.slice(1)}`;
-
-  if (isIdle) {
-    return null;
-  }
 
   return (
     <div
