@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useTambo, useTamboMessageContext } from "@tambo-ai/react";
+import { useTambo, useTamboCurrentMessage } from "@tambo-ai/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as RechartsCore from "recharts";
@@ -126,7 +126,7 @@ export const Graph = React.forwardRef<HTMLDivElement, GraphProps>(
   ) => {
     // Get thread state
     const { thread } = useTambo();
-    const { messageId } = useTamboMessageContext();
+    const messageId = useTamboCurrentMessage()?.id;
 
     const message = thread?.messages[thread?.messages.length - 1];
 
@@ -164,8 +164,8 @@ export const Graph = React.forwardRef<HTMLDivElement, GraphProps>(
                 {isGenerating
                   ? "Streaming data..."
                   : data
-                    ? "Data ready"
-                    : "Awaiting data"}
+                  ? "Data ready"
+                  : "Awaiting data"}
               </span>
             </div>
           </div>
