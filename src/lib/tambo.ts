@@ -8,12 +8,12 @@
  * Read more about Tambo at https://tambo.co/docs
  */
 
+import { Graph, graphSchema } from "@/components/tambo/graph";
 import { DataCard, dataCardSchema } from "@/components/ui/card-data";
 import {
   EditableIssueTableWithTamboSave,
   editableIssueTableSchema,
 } from "@/components/ui/editable-issue-table";
-import { Graph, graphSchema } from "@/components/ui/graph";
 import {
   RenderDiagram,
   renderDiagramSchema,
