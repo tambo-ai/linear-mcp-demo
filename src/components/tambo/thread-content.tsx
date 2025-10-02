@@ -1,17 +1,18 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { type TamboThreadMessage, useTambo } from "@tambo-ai/react";
-import { type VariantProps } from "class-variance-authority";
-import * as React from "react";
 import {
   Message,
   MessageContent,
   MessageImages,
   MessageRenderedComponentArea,
+  ReasoningInfo,
   ToolcallInfo,
   type messageVariants,
-} from "./message";
+} from "@/components/tambo/message";
+import { cn } from "@/lib/utils";
+import { type TamboThreadMessage, useTambo } from "@tambo-ai/react";
+import { type VariantProps } from "class-variance-authority";
+import * as React from "react";
 
 /**
  * @typedef ThreadContentContextValue
@@ -130,7 +131,7 @@ const ThreadContentMessages = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn("flex flex-col gap-4", className)}
+      className={cn("flex flex-col gap-2", className)}
       data-slot="thread-content-messages"
       {...props}
     >
@@ -157,10 +158,11 @@ const ThreadContentMessages = React.forwardRef<
             >
               <div
                 className={cn(
-                  "flex flex-col gap-2",
+                  "flex flex-col",
                   message.role === "assistant" ? "w-full" : "max-w-3xl",
                 )}
               >
+                <ReasoningInfo />
                 <MessageImages />
                 <MessageContent
                   className={
