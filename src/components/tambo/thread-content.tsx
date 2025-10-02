@@ -3,9 +3,11 @@
 import {
   Message,
   MessageContent,
+  MessageImages,
   MessageRenderedComponentArea,
+  ToolcallInfo,
   type messageVariants,
-} from "@/components/ui/message";
+} from "../message/message";
 import { cn } from "@/lib/utils";
 import { type TamboThreadMessage, useTambo } from "@tambo-ai/react";
 import { type VariantProps } from "class-variance-authority";
@@ -155,10 +157,11 @@ const ThreadContentMessages = React.forwardRef<
             >
               <div
                 className={cn(
-                  "flex flex-col",
+                  "flex flex-col gap-2",
                   message.role === "assistant" ? "w-full" : "max-w-3xl",
                 )}
               >
+                <MessageImages />
                 <MessageContent
                   className={
                     message.role === "assistant"
@@ -166,6 +169,7 @@ const ThreadContentMessages = React.forwardRef<
                       : "text-primary bg-container hover:bg-backdrop font-sans"
                   }
                 />
+                <ToolcallInfo />
                 <MessageRenderedComponentArea className="w-full" />
               </div>
             </Message>

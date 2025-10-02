@@ -407,16 +407,10 @@ const ThreadHistoryList = React.forwardRef<
 
     const query = searchQuery.toLowerCase();
     return threads.items.filter((thread: TamboThread) => {
-      const nameMatches = !!thread.name?.toLowerCase().includes(query);
-      return (
-        thread.id.toLowerCase().includes(query) ??
-        nameMatches ??
-        thread.messages.some((message) =>
-          message.content.some(
-            (content) => !!content.text?.toLowerCase().includes(query),
-          ),
-        )
-      );
+      const nameMatches = thread.name?.toLowerCase().includes(query) ?? false;
+      const idMatches = thread.id.toLowerCase().includes(query);
+
+      return idMatches ? true : nameMatches;
     });
   }, [isCollapsed, threads, searchQuery]);
 
@@ -500,35 +494,50 @@ const ThreadHistoryList = React.forwardRef<
             className={cn(
               "p-2 rounded-md hover:bg-backdrop cursor-pointer group flex items-center justify-between",
               currentThread?.id === thread.id ? "bg-muted" : "",
+              editingThread?.id === thread.id ? "bg-muted" : "",
             )}
           >
-            {editingThread?.id === thread.id ? (
-              <form onSubmit={handleNameSubmit} className="flex-1">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="w-full bg-background rounded px-2 py-1 text-sm focus:outline-none"
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </form>
-            ) : (
-              <div className="text-sm flex-1">
-                <span className="font-medium line-clamp-1">
-                  {thread.name ?? `Thread ${thread.id.substring(0, 8)}`}
-                </span>
-                <p className="text-xs text-muted-foreground truncate mt-1">
-                  {new Date(thread.createdAt).toLocaleString(undefined, {
-                    month: "short",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "2-digit",
-                  })}
-                </p>
-              </div>
-            )}
+            <div className="text-sm flex-1">
+              {editingThread?.id === thread.id ? (
+                <form
+                  onSubmit={handleNameSubmit}
+                  className="flex flex-col gap-1"
+                >
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="w-full bg-background px-1 text-sm font-medium focus:outline-none rounded-sm"
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder="Thread name..."
+                  />
+                  <p className="text-xs text-muted-foreground truncate">
+                    {new Date(thread.createdAt).toLocaleString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </form>
+              ) : (
+                <>
+                  <span className="font-medium line-clamp-1">
+                    {thread.name ?? `Thread ${thread.id.substring(0, 8)}`}
+                  </span>
+                  <p className="text-xs text-muted-foreground truncate mt-1">
+                    {new Date(thread.createdAt).toLocaleString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </>
+              )}
+            </div>
             <ThreadOptionsDropdown
               thread={thread}
               onRename={handleRename}
@@ -561,14 +570,15 @@ ThreadHistoryList.displayName = "ThreadHistory.List";
 /**
  * Dropdown menu component for thread actions
  */
-const ThreadOptionsDropdown = React.forwardRef<
-  HTMLDivElement,
-  {
-    thread: TamboThread;
-    onRename: (thread: TamboThread) => void;
-    onGenerateName: (thread: TamboThread) => void;
-  } & React.HTMLAttributes<HTMLDivElement>
->(({ thread, onRename, onGenerateName }) => {
+const ThreadOptionsDropdown = ({
+  thread,
+  onRename,
+  onGenerateName,
+}: {
+  thread: TamboThread;
+  onRename: (thread: TamboThread) => void;
+  onGenerateName: (thread: TamboThread) => void;
+}) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -609,8 +619,7 @@ const ThreadOptionsDropdown = React.forwardRef<
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
   );
-});
-ThreadOptionsDropdown.displayName = "ThreadHistory.Dropdown";
+};
 
 export {
   ThreadHistory,
